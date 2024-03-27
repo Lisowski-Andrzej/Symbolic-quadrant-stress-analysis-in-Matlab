@@ -1,0 +1,47 @@
+%% Analityczne wsparcie symulacji sloneczka
+
+% 1  Warunek na wyboczenie ramienia 
+
+
+l = 120 * 10^(-3);                                             % długość [m]
+E = 70 * 10^9;                                                 % Moduł Younga aluminium materiału [GPa]                                                           % części na króte jest podzielony wał przez podpory
+lw = l;                                                        % zakładam długość wyboczenia równiej 1 długości 
+P_max = 500;                                                   %  siła ściskająca
+b = 10 * 10^(-3);                                              % promień wału
+t = 2 * 10^(-3);                                               % grubosc sloneczka 
+Rh = 220 * 10^6; ;                                             % granica proporjonalności materiału [MPa]
+Re = 230 * 10^6;                                               % granica plastyczności aluminium [Pa]
+I = (b * t^3)/12;
+
+i = sqrt(I/(b * t));                                           % promień bezwładności pręta
+lambda = lw/i;                                                 % warunek wyboczenia sprężystego, smukłość pręta 
+
+lg = pi * sqrt(E/Rh);                                          % smugłość graniczna materiału
+
+if lambda > lg                                                 % wtedy możliwe skorzystanie jest ze wzoru Eurela 
+sila_krytyczna_wyboczajaca = (pi^2 * E * I)/(l^2)              % siła krytyczna                                   % 
+end 
+
+
+% Warunek na zgananie sruby                                                    
+
+E = 210 * 10^9;                                                % Moduł Younga dla stali [GPa]
+F = 1000;  % siła uginająca
+h = 40 * 10^(-3);   % wysokośc nitu
+r = 3 * 10^(-3);   % promień nitu 
+I = (pi * r^4)/2;  % bezwładnośc nitu
+
+% strzalka ugiecia
+
+maksymalne_ugieiecie_nitu = (F * h^3)/ (48 * E * I);
+maksymalne_naprezenie_nitu = E * maksymalne_ugieiecie_nitu
+maksymalne_naprezenia_na_zginanie = 0.2 * Re                   % zdefiniowanie wytrzymałości na zginanie dla naprężeń obustronnie tętniących [Pa]
+
+% warunek na docisk blachy przy nicie
+
+P_dociskajaca_przy_nicie = kd * r * 2 * t
+
+kd = 0.45 * Re;                                                % zdefiniowanie wytrzymałości na dociskanie tętniące dwustronne
+
+Ad1 = b * t;                                                   % powierzchnia docisku       
+maksymalna_sila_dociskajaca = kd * Ad1                         % maksymalna siła dociskająca
